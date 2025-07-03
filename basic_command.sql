@@ -15,6 +15,7 @@ MIN(*) : 최소 값
 GROUP BY : 그룹
 HAVING : 그룹 조건
 LIMIT : 조회 개수 제한
+OFFSET : N칸 이후
 BETWEEN : 범위 조건
 IN : 여러 값 중 하나
 LIKE : 문자열 검색 %, _
@@ -76,6 +77,9 @@ HAVING COUNT(*) >= 2;
 
 --조회 개수
 SELECT * FROM users LIMIT 5;
+
+--LIMIT
+SELECT * FROM users OFFSET 5;
 
 --BETWEEN
 SELECT * FROM users WHERE age BETWEEN 20 AND 30; -- 범위 조건
