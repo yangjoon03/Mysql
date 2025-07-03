@@ -131,3 +131,4 @@ SELECT * FROM age_count_view WHERE count >= 2;
 --뷰 삭제
 DROP VIEW age_count_view;
 
+
