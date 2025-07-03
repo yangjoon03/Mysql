@@ -1,3 +1,6 @@
+## 연습 사이트
+https://sqlbolt.com/lesson/select_queries_review
+
 <details>
 <summary><h2>Json으로 "," 태그 추출하기</h2></summary>
 
