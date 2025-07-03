@@ -38,3 +38,36 @@ JSON 형태로 변환하여 태그를 분리 후 삽입하는 과정입니다.
    장르 정보가 없는 행(`NULL` 또는 빈 문자열)은 제외
 
 </details>
+
+## 1.서브쿼리
+* 다른 SQL문 안에 중첩된 SELECTE 문
+```sql
+-- 평균 나이보다 나이가 많은 사용자
+SELECT name, age
+FROM users
+WHERE age > (
+    SELECT AVG(age) FROM users
+);
+```
+## 2.뷰
+* 자주 사용하는 SELECTE 문을 가상의 테이블 처럼 저장
+### 뷰 만들기
+```sql
+-- 나이별 사용자 수를 계산하는 뷰 생성
+CREATE VIEW age_count_view AS
+SELECT age, COUNT(*) AS count
+FROM users
+GROUP BY age;
+```
+### 뷰 사용하기
+```sql
+-- 뷰를 테이블처럼 사용
+SELECT * FROM age_count_view WHERE count >= 2;
+```
+### 뷰 삭제하기
+```sql
+DROP VIEW age_count_view;
+```
+
+
+
