@@ -39,11 +39,132 @@ JSON 형태로 변환하여 태그를 분리 후 삽입하는 과정입니다.
 
 </details>
 
-## 1.JOIN
+
+<details>
+<summary><h2>1.JOIN</h2></summary>
 
 
+### employees 테이블
+| emp_id | name | dept_id | manager_id |
+|--------|------|---------|------------|
+| 1 | 김철수 | 1 | 3 |
+| 2 | 이영희 | 2 | 3 |
+| 3 | 박부장 | 1 | NULL |
+| 4 | 최민수 | 3 | 3 |
+| 5 | 정수진 | NULL | 3 |
+
+### departments 테이블
+| dept_id | dept_name |
+|---------|-----------|
+| 1 | 개발팀 |
+| 2 | 마케팅팀 |
+| 3 | 영업팀 |
+| 4 | 인사팀 |
+
+---
+
+## JOIN 결과
+
+### 1. INNER JOIN
+양쪽 테이블에 모두 존재하는 데이터만 조회
+```sql
+SELECT e.name, d.dept_name
+FROM employees e
+INNER JOIN departments d ON e.dept_id = d.dept_id;
+```
+
+| name | dept_name |
+|------|-----------|
+| 김철수 | 개발팀 |
+| 이영희 | 마케팅팀 |
+| 박부장 | 개발팀 |
+| 최민수 | 영업팀 |
+
+### 2. LEFT JOIN
+왼쪽 테이블(employees)의 모든 데이터를 포함
+```sql
+SELECT e.name, d.dept_name
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.dept_id;
+```
+
+| name | dept_name |
+|------|-----------|
+| 김철수 | 개발팀 |
+| 이영희 | 마케팅팀 |
+| 박부장 | 개발팀 |
+| 최민수 | 영업팀 |
+| 정수진 | NULL |
+
+### 3. RIGHT JOIN
+오른쪽 테이블(departments)의 모든 데이터를 포함
+```sql
+SELECT e.name, d.dept_name
+FROM employees e
+RIGHT JOIN departments d ON e.dept_id = d.dept_id;
+```
+
+| name | dept_name |
+|------|-----------|
+| 김철수 | 개발팀 |
+| 박부장 | 개발팀 |
+| 이영희 | 마케팅팀 |
+| 최민수 | 영업팀 |
+| NULL | 인사팀 |
+
+### 4. FULL OUTER JOIN (MySQL에서는 UNION 사용)
+양쪽 테이블의 모든 데이터를 포함
+```sql
+SELECT e.name, d.dept_name
+FROM employees e
+LEFT JOIN departments d ON e.dept_id = d.dept_id
+UNION
+SELECT e.name, d.dept_name
+FROM employees e
+RIGHT JOIN departments d ON e.dept_id = d.dept_id;
+```
+
+| name | dept_name |
+|------|-----------|
+| 김철수 | 개발팀 |
+| 이영희 | 마케팅팀 |
+| 박부장 | 개발팀 |
+| 최민수 | 영업팀 |
+| 정수진 | NULL |
+| NULL | 인사팀 |
+
+### 5. SELF JOIN
+같은 테이블 내에서 조인 (직원과 매니저 관계)
+```sql
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+JOIN employees m ON e.manager_id = m.emp_id;
+```
+
+| employee | manager |
+|----------|---------|
+| 김철수 | 박부장 |
+| 이영희 | 박부장 |
+| 최민수 | 박부장 |
+| 정수진 | 박부장 |
+
+---
+
+## JOIN 종류 요약
+
+| JOIN 종류 | 설명 | 특징 |
+|-----------|------|------|
+| **INNER JOIN** | 양쪽 테이블에 모두 존재하는 데이터만 조회 | 교집합 |
+| **LEFT JOIN** | 왼쪽 테이블의 모든 데이터 + 오른쪽 테이블의 매칭되는 데이터 | 왼쪽 테이블 기준 |
+| **RIGHT JOIN** | 오른쪽 테이블의 모든 데이터 + 왼쪽 테이블의 매칭되는 데이터 | 오른쪽 테이블 기준 |
+| **FULL OUTER JOIN** | 양쪽 테이블의 모든 데이터 포함 | 합집합 |
+| **SELF JOIN** | 같은 테이블 내에서 자기 자신과 조인 | 계층 구조 표현 |
+</details>
 
 
+<br>
+
+  
 ## 2.서브쿼리
 * 다른 SQL문 안에 중첩된 SELECTE 문
 ```sql
@@ -54,6 +175,9 @@ WHERE age > (
     SELECT AVG(age) FROM users
 );
 ```
+<br>
+
+
 ## 3.뷰
 * 자주 사용하는 SELECTE 문을 가상의 테이블 처럼 저장
 ### 뷰 만들기
